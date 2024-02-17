@@ -43,14 +43,12 @@ reaction(o, h, oh).
 reaction(h2, h, h3).
 reaction(h, o, naoh).
 
-% Base case: X is directly involved in the reaction leading to Y
 checkPartOf(X, Y) :-
+  % Base case: X is directly involved in the reaction leading to Y
   reaction(X, _, Y);
+  reaction(_, X, Y);
 
-  reaction(_, X, Y).
-
-% Inductive case: X is indirectly involved in a reaction leading to Y
-checkPartOf(X, Y) :-
+  % Inductive case: X is indirectly involved in a reaction leading to Y
   reaction(X, _, Z),
   checkPartOf(Z, Y);
 
@@ -65,6 +63,7 @@ before(the_hunger_games_mockingjay_part1, the_hunger_games_mockingjay_part2).
 
 mustWatchBefore(M1, M2) :-
   before(M1, M2); % M1 must be watched directly before M2
+
   (before(M1, Any), % M1 must be watched directly before Any
   mustWatchBefore(Any, M2)). % Any must be watched before M2
 
@@ -75,6 +74,7 @@ parent(jim, jill).
 
 descendant(X, Y) :-
   parent(Y, X); % X is a direct child of Y
+
   (parent(Y, Z), % Y is a parent of Z
   descendant(X, Z)). % X is a descendant of Z
 
@@ -91,5 +91,6 @@ composedOf(wall, brick).
 
 partOf(X, Y) :-
   composedOf(Y, X); % X is a component of Y
+  
   (composedOf(Y, Z), % Y is composed of Z
   partOf(X, Z)). % X is part of Z
